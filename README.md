@@ -2,7 +2,13 @@
 
 [![Build](https://github.com/zakolenko/abnf/workflows/build/badge.svg?branch=main)](https://github.com/purebits/abnf/actions?query=branch%3Amain+workflow%3Abuild) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.purebits/abnf-core_2.13/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.purebits/abnf-core_2.13)
 
-abnf
+An ABNF parser based on [cats-parse](https://github.com/typelevel/cats-parse) and [droste](https://github.com/higherkindness/droste).
+ 
+## TODO
+
+- documentation
+- tests
+- ABNF grammar based parser generator 
 
 ## Usage
 
@@ -10,6 +16,7 @@ The packages are published on Maven Central.
 
 ```scala
 libraryDependencies += "io.github.purebits" %% "abnf-core" % "<version>"
+libraryDependencies += "io.github.purebits" %% "abnf-algebra" % "<version>"
 ```
 
 ## Documentation
