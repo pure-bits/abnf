@@ -59,7 +59,7 @@ object ABNFParser {
   val charValue: Parser[Text] = {
     // string of SP and VCHAR without DQUOTE
     val text: Parser0[String] = (P.charIn(0x20, 0x21) | P.charIn(0x23.toChar to 0x7e.toChar)).rep0.string
-    text.with1.surroundedBy(dquote).map(Text).withContext("char-value")
+    text.with1.surroundedBy(dquote).map(Text.apply).withContext("char-value")
   }
 
   val crlf: Parser[Unit] = Rfc5234.crlf.backtrack | Rfc5234.lf
@@ -78,7 +78,7 @@ object ABNFParser {
   // ALPHA *(ALPHA / DIGIT / "-")
   val ruleName: Parser[NonTerminal] = {
     (alpha ~ (alpha | digit | hyphen).rep0).string
-      .map(NonTerminal)
+      .map(NonTerminal.apply)
       .withContext("rulename")
   }
 
@@ -87,7 +87,7 @@ object ABNFParser {
     val option: Parser[Expr.Optional] = {
       expr
         .between(P.char('[') ~ cwsp0, cwsp0 ~ P.char(']'))
-        .map(Optional)
+        .map(Optional.apply)
         .withContext("option")
     }
 
@@ -95,7 +95,7 @@ object ABNFParser {
     val group: Parser[Expr.Group] = {
       expr
         .between(P.char('(') ~ cwsp0, cwsp0 ~ P.char(')'))
-        .map(Group)
+        .map(Group.apply)
         .withContext("group")
     }
 
@@ -128,13 +128,13 @@ object ABNFParser {
     // repetition *(1*c-wsp repetition)
     val concatenation: Parser[ABNF.Expr] = {
       (repetition ~ (cwsp.rep *> repetition).backtrack.rep0).map {
-        case (h, t) => t.foldLeft(h)(Concatenation)
+        case (h, t) => t.foldLeft(h)(Concatenation.apply)
       }.withContext("concatenation")
     }
 
     // concatenation *(*c-wsp "/" *c-wsp concatenation)
     (concatenation ~ (P.char('/').surroundedBy(cwsp0) *> concatenation).backtrack.rep0).map {
-      case (h, t) => t.foldLeft(h)(Alternation)
+      case (h, t) => t.foldLeft(h)(Alternation.apply)
     }.withContext("alternation")
   }
 
@@ -171,6 +171,6 @@ object ABNFParser {
   val grammar: Parser[ABNF.Grammar] =
     ruleList
       .mapFilter(NonEmptyList.fromList)
-      .map(ABNF.Grammar)
+      .map(ABNF.Grammar.apply)
       .withContext("grammar")
 }
