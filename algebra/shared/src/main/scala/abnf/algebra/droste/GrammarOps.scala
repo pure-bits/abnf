@@ -40,8 +40,8 @@ final class GrammarOps(private val grammar: Grammar) extends AnyVal {
       )) {
       case ((leftNT, rightNT), rule) =>
         (
-          leftNT.addOne(rule.name.value),
-          rightNT.addAll(getNonTerminals(rule.definition))
+          leftNT += rule.name.value,
+          rightNT ++= getNonTerminals(rule.definition)
         )
     }
 
